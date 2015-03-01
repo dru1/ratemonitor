@@ -1,20 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<title>${appName}</title>
-</head>
-
+<#include "header.ftl">
 <body>
-	<pre>${appName}
-	
-Date: ${time?date}
-Time: ${time?time}
-Updates: ${updates}
-Rates: ${rates?size}
-		
+<pre>${appName}
+--------------------------------------------------------------------</pre>
+<pre>
 <#list rates as x>
-	${x}
+${x}
 </#list>
 </pre>
+<#include "footer.ftl">
 </body>
 </html>

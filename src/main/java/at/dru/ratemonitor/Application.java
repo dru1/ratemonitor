@@ -12,6 +12,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import java.util.Date;
+
 @Configuration
 @ComponentScan
 @EnableScheduling
@@ -24,8 +26,15 @@ public class Application {
 	@Autowired
 	private IRateProvider rateUpdater;
 
+	private final Date startup;
+
 	public Application() {
+		startup = new Date();
 		log.info("Rate Monitor created");
+	}
+
+	public Date getStartup() {
+		return startup;
 	}
 
 	/**
