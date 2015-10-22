@@ -7,6 +7,8 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,10 +19,11 @@ import java.text.SimpleDateFormat;
 @Component
 public class EURRateUpdater implements IRateProvider {
 
-	private static final SimpleDateFormat df = new SimpleDateFormat(
-			"dd.MM.yyyy HH:mm");
+    private static final SimpleDateFormat DATE_FORMAT_RATE = new SimpleDateFormat("dd.MM.yyyy HH:mm");
 
-	private final Log log = LogFactory.getLog(EURRateUpdater.class);
+    private static final Sort SORT_RATE = new Sort(Sort.Direction.DESC, "id");
+
+    private static final Log logger = LogFactory.getLog(EURRateUpdater.class);
 
 	@Autowired
 	private ConversionRateRepository conversionRateRepository;
@@ -37,8 +40,8 @@ public class EURRateUpdater implements IRateProvider {
 	private int updateCounter = 0;
 
 	/**
-	 * @see at.dru.ratemonitor.IRateUpdater#getUpdateCounter()
-	 */
+     * @see IRateUpdater#getUpdateCounter()
+     */
 	@Override
 	public synchronized int getUpdateCounter() {
 		return updateCounter;
@@ -49,16 +52,20 @@ public class EURRateUpdater implements IRateProvider {
 	}
 
 	@Override
-	public Iterable<ConversionRate> getRates() {
-		return conversionRateRepository.findAll();
-	}
+    public Iterable<ConversionRate> getRates(Integer limit) {
+        if (limit != null) {
+            PageRequest pageRequest = new PageRequest(0, limit, SORT_RATE);
+            return conversionRateRepository.findAll(pageRequest);
+        }
+        return conversionRateRepository.findAll(SORT_RATE);
+    }
 
 	/**
-	 * @see at.dru.ratemonitor.IRateUpdater#update()
-	 */
+     * @see IRateUpdater#update()
+     */
 	@Override
 	public void update() {
-		log.info("Updating...");
+        logger.info("Updating...");
 
 		Document doc;
 		try {
@@ -97,8 +104,8 @@ public class EURRateUpdater implements IRateProvider {
 		cr.setBuyRate(Double.valueOf(el.child(3).text().trim()));
 		cr.setSellRate(Double.valueOf(el.child(4).text().trim()));
 		cr.setChangedDate(changedDate);
-		cr.setParsedDate(df.parse(cr.getChangedDate()));
-		conversionRateRepository.save(cr);
+        cr.setParsedDate(DATE_FORMAT_RATE.parse(cr.getChangedDate()));
+        conversionRateRepository.save(cr);
 	}
 
 }
