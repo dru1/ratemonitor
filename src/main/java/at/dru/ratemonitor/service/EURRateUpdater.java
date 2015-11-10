@@ -1,5 +1,7 @@
-package at.dru.ratemonitor;
+package at.dru.ratemonitor.service;
 
+import at.dru.ratemonitor.data.ConversionRate;
+import at.dru.ratemonitor.data.ConversionRateRepository;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jsoup.Jsoup;
@@ -29,7 +31,7 @@ public class EURRateUpdater implements IRateProvider {
 	private ConversionRateRepository conversionRateRepository;
 
 	@Value("${application.baseUrl}")
-	private String baseUrl = "";
+	private String baseUrl;
 
 	@Value("${application.timeOut}")
 	private int timeOut;

@@ -1,4 +1,4 @@
-package at.dru.ratemonitor;
+package at.dru.ratemonitor.service;
 
 public interface IRateUpdater {
 

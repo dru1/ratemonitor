@@ -1,6 +1,7 @@
 package at.dru.ratemonitor;
 
 
+import at.dru.ratemonitor.service.IRateProvider;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +21,8 @@ import java.util.Date;
 @EnableTransactionManagement
 @EnableAutoConfiguration
 public class Application {
-	
-	private final Log log = LogFactory.getLog(Application.class);
+
+	private static final Log logger = LogFactory.getLog(Application.class);
 	
 	@Autowired
 	private IRateProvider rateUpdater;
@@ -30,7 +31,7 @@ public class Application {
 
 	public Application() {
 		startup = new Date();
-		log.info("Rate Monitor created");
+		logger.info("Rate Monitor created");
 	}
 
 	public Date getStartup() {

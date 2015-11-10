@@ -1,4 +1,4 @@
-package at.dru.ratemonitor;
+package at.dru.ratemonitor.data;
 
 import javax.persistence.*;
 import java.util.Date;

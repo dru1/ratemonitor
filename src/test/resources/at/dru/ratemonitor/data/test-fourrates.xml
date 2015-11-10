@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <ConversionRate fromCurrency="CHF" country="LI" toCurrency="EUR" buyRate="1" sellRate="1"
+                    changedDate="2016-01-01 10:10" parsedDate="2016-01-01"/>
+    <ConversionRate fromCurrency="CHF" country="LI" toCurrency="EUR" buyRate="1" sellRate="1"
+                    changedDate="2016-01-01 10:10" parsedDate="2016-01-01"/>
+    <ConversionRate fromCurrency="CHF" country="LI" toCurrency="EUR" buyRate="1" sellRate="1"
+                    changedDate="2016-01-01 10:10" parsedDate="2016-01-01"/>
+    <ConversionRate fromCurrency="CHF" country="LI" toCurrency="EUR" buyRate="1" sellRate="1"
+                    changedDate="2016-01-01 10:10" parsedDate="2016-01-01"/>
+</dataset>

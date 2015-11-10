@@ -1,5 +1,7 @@
 package at.dru.ratemonitor;
 
+import at.dru.ratemonitor.data.ConversionRate;
+
 import java.util.List;
 
 public class RatesResponse {

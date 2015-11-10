@@ -1,4 +1,6 @@
-package at.dru.ratemonitor;
+package at.dru.ratemonitor.service;
+
+import at.dru.ratemonitor.data.ConversionRate;
 
 public interface IRateProvider extends IRateUpdater {
 	
