@@ -2,7 +2,7 @@ package at.dru.ratemonitor.service;
 
 import at.dru.ratemonitor.data.ConversionRate;
 
-public interface IRateProvider extends IRateUpdater {
+public interface IRateProvider {
 	
 	/**
 	 * @param limit Max. Anzahl

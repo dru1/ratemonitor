@@ -1,7 +1,7 @@
 package at.dru.ratemonitor;
 
 
-import at.dru.ratemonitor.service.IRateProvider;
+import at.dru.ratemonitor.service.IRateUpdater;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ public class Application {
 	private static final Log logger = LogFactory.getLog(Application.class);
 	
 	@Autowired
-	private IRateProvider rateUpdater;
+	private IRateUpdater rateUpdater;
 
 	private final Date startup;
 
