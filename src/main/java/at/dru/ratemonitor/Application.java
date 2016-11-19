@@ -31,18 +31,9 @@ public class Application {
 
 	public Application() {
 		startup = new Date();
-		logger.info("Rate Monitor created");
+		logger.info("Rate Monitor created at " + startup);
 	}
 
-	public Date getStartup() {
-		return startup;
-	}
-
-	/**
-	 * simple run!
-	 * 
-	 * @param args
-	 */
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }

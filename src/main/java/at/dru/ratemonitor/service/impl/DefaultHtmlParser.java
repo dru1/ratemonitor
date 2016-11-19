@@ -6,6 +6,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Nonnull;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.function.Function;
@@ -73,8 +74,9 @@ public class DefaultHtmlParser implements IHtmlParser {
         return cr;
     };
 
+    @Nonnull
     @Override
-    public Function<Document, ConversionRate> getMapper(String baseUrl) {
+    public Function<Document, ConversionRate> getMapper(@Nonnull String baseUrl) {
         switch (baseUrl) {
             case LLB_QUOTES_URL:
                 return LLB_QUOTES_MAPPER;

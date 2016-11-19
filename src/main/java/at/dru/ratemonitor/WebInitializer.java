@@ -1,7 +1,7 @@
 package at.dru.ratemonitor;
 
 import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.boot.context.web.SpringBootServletInitializer;
+import org.springframework.boot.web.support.SpringBootServletInitializer;
 
 /**
  * to generate web.xml and configuration for the servlet container

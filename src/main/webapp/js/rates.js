@@ -8,7 +8,7 @@ function rmBuildChart(chartId, chartLimit, history) {
         var data;
 
         nv.addGraph(function() {
-            chart = nv.models.lineChart()
+            chart = nv.models.lineWithFocusChart()
                 .options({
                     transitionDuration: 300,
                     useInteractiveGuideline: true
