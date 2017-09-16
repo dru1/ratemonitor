@@ -3,6 +3,7 @@ application:
   timeOut: 10000
   appName: LLB EUR Rate Monitor
   userAgent: Mozilla
+  country: EWU
 
 ---
 spring:

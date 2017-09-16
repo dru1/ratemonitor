@@ -28,6 +28,9 @@ public class DefaultHtmlParser implements IHtmlParser {
     @Value("${application.userAgent}")
     private String userAgent;
 
+    @Value("${application.country}")
+    private String country;
+
     @Nonnull
     @Override
     public List<ConversionRate> getConversionRates() {
@@ -58,10 +61,6 @@ public class DefaultHtmlParser implements IHtmlParser {
                 .orElseThrow(() -> new IllegalStateException("Cannot select changed time"));
 
         String changedDate = changedDatePart + " " + changedTimePart;
-
-        String country = Optional.ofNullable(doc.select("body > div > div > table > tbody > tr:nth-child(6) > td:nth-child(1)"))
-                .map(Elements::text)
-                .orElseThrow(() -> new IllegalStateException("Cannot select country"));
 
         double buyRate = Optional.ofNullable(doc.select("body > div > div > table > tbody > tr:nth-child(6) > td:nth-child(3)"))
                 .map(Elements::text)
