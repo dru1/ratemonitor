@@ -1,14 +1,16 @@
 package at.dru.ratemonitor.service;
 
 import at.dru.ratemonitor.data.ConversionRate;
-import org.jsoup.nodes.Document;
 
 import javax.annotation.Nonnull;
-import java.util.function.Function;
+import java.util.List;
 
 public interface IHtmlParser {
 
+    /**
+     * @return parse conversion rates
+     */
     @Nonnull
-    Function<Document, ConversionRate> getMapper(@Nonnull  String baseUrl);
+    List<ConversionRate> getConversionRates();
 
 }

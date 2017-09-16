@@ -6,16 +6,14 @@ import at.dru.ratemonitor.service.IHtmlParser;
 import at.dru.ratemonitor.service.IRateUpdater;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.IOException;
-import java.util.Collection;
-import java.util.Collections;
+import javax.annotation.Nullable;
+import java.util.Date;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Component
 public class DefaultRateUpdater implements IRateUpdater {
@@ -28,51 +26,27 @@ public class DefaultRateUpdater implements IRateUpdater {
     @Autowired
     private IHtmlParser htmlParser;
 
-    @Value("${application.baseUrl}")
-    private String baseUrl;
+    private final AtomicInteger updateCounter = new AtomicInteger();
+    private final AtomicReference<Date> lastUpdate = new AtomicReference<>();
 
-    @Value("${application.timeOut}")
-    private int timeOut;
-
-    @Value("${application.userAgent}")
-    private String userAgent;
-
-    private Collection<Document> getDocuments() {
-        try {
-            return Collections.singleton(getDocument(baseUrl));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private Document getDocument(String baseUrl) throws IOException {
-        return Jsoup.connect(baseUrl).timeout(timeOut).userAgent(userAgent).get();
-    }
-
-    private int updateCounter = 0;
-
-    /**
-     * @see IRateUpdater#getUpdateCounter()
-     */
     @Override
-    public synchronized int getUpdateCounter() {
-        return updateCounter;
+    public int getUpdateCounter() {
+        return updateCounter.get();
     }
 
-    private synchronized void setUpdateCounter(int updateCounter) {
-        this.updateCounter = updateCounter;
+    @Nullable
+    @Override
+    public Date getLastUpdate() {
+        return lastUpdate.get();
     }
 
-    /**
-     * @see IRateUpdater#update()
-     */
     @Override
     public void update() {
         logger.info("Updating...");
-
-        getDocuments().stream().map(htmlParser.getMapper(baseUrl)).forEach(this::saveConversionRate);
-
-        setUpdateCounter(getUpdateCounter() + 1);
+        htmlParser.getConversionRates().forEach(this::saveConversionRate);
+        logger.info("Done...");
+        updateCounter.incrementAndGet();
+        lastUpdate.set(new Date());
     }
 
     private boolean isNewRate(String changedDate) {

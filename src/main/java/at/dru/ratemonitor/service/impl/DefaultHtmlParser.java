@@ -2,89 +2,86 @@ package at.dru.ratemonitor.service.impl;
 
 import at.dru.ratemonitor.data.ConversionRate;
 import at.dru.ratemonitor.service.IHtmlParser;
+import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Nonnull;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.function.Function;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
 @Component
 public class DefaultHtmlParser implements IHtmlParser {
 
-    private static final SimpleDateFormat DATE_FORMAT_RATE = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+    private static final SimpleDateFormat DATE_FORMAT_RATE = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+    private static final String URL = "https://www.llb.li/de/private/anlegen/direktanlagen/devisen-und-edelmetalle/devisenkurse?iframe=1";
 
-    private static final String LLB_QUOTES_URL = "http://quotes.llb.li/llbExchangeRateNoten.html";
-    private static final Function<Document, ConversionRate> LLB_QUOTES_MAPPER = (doc) -> {
-        ConversionRate cr = new ConversionRate();
+    @Value("${application.timeOut}")
+    private int timeOut;
 
-        Element el = doc.select("table#tableData tbody tr:eq(1)").first();
-        if (el == null) {
-            throw new IllegalStateException("Nothing selected");
-        }
-
-        // decode the changed date
-        String changedDate = el.child(5).text() + " " + el.child(6).text();
-
-        cr.setFromCurrency("CHF");
-        cr.setCountry(el.child(0).text());
-        cr.setToCurrency(el.child(1).text());
-        cr.setBuyRate(Double.valueOf(el.child(3).text().trim()));
-        cr.setSellRate(Double.valueOf(el.child(4).text().trim()));
-        cr.setChangedDate(changedDate);
-        try {
-            cr.setParsedDate(DATE_FORMAT_RATE.parse(changedDate));
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
-        return cr;
-    };
-
-    private static final String LLB_DEVISEN_URL = "https://www.llb.li/de/privatkunden/anlegen-sparen/noten-devisen-edelmetallkurse/devisenkurse";
-    private static final Function<Document, ConversionRate> LLB_DEVISEN_MAPPER = (doc) -> {
-        ConversionRate cr = new ConversionRate();
-
-        Element date = doc.select("#pagetype_0_pagecontent_0_ctl00_panData > div").first();
-        if (date == null) {
-            throw new IllegalStateException("Nothing selected");
-        }
-
-        Element data = doc.select("#pagetype_0_pagecontent_0_ctl00_panData > table > tbody > tr").get(5);
-        if (data == null) {
-            throw new IllegalStateException("Nothing selected");
-        }
-
-        // decode the changed date
-        String changedDate = date.child(0).ownText().trim() + " " + date.child(1).ownText().trim();
-
-        cr.setFromCurrency("CHF");
-        cr.setCountry(data.child(0).text());
-        cr.setToCurrency("EUR");
-        cr.setBuyRate(Double.valueOf(data.child(2).text().trim()));
-        cr.setSellRate(Double.valueOf(data.child(3).text().trim()));
-        cr.setChangedDate(changedDate);
-        try {
-            cr.setParsedDate(DATE_FORMAT_RATE.parse(changedDate));
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
-
-        return cr;
-    };
+    @Value("${application.userAgent}")
+    private String userAgent;
 
     @Nonnull
     @Override
-    public Function<Document, ConversionRate> getMapper(@Nonnull String baseUrl) {
-        switch (baseUrl) {
-            case LLB_QUOTES_URL:
-                return LLB_QUOTES_MAPPER;
-            case LLB_DEVISEN_URL:
-                return LLB_DEVISEN_MAPPER;
-            default:
-                throw new RuntimeException("Unsupported url");
+    public List<ConversionRate> getConversionRates() {
+        try {
+            return loadRatesFromURL();
+        } catch (IOException | ParseException e) {
+            throw new RuntimeException("Cannot parse rates", e);
         }
+    }
+
+    @Nonnull
+    private List<ConversionRate> loadRatesFromURL() throws IOException, ParseException {
+        Document doc = Jsoup.connect(URL)
+                .timeout(timeOut)
+                .userAgent(userAgent)
+                .get();
+
+        ConversionRate cr = new ConversionRate();
+
+        String changedDatePart = Optional.ofNullable(doc.select("body > div > div > p:nth-child(1)"))
+                .map(Elements::text)
+                .map(text -> text.replace("Datum: ", "").trim())
+                .orElseThrow(() -> new IllegalStateException("Cannot select changed date"));
+
+        String changedTimePart = Optional.ofNullable(doc.select("body > div > div > p:nth-child(2)"))
+                .map(Elements::text)
+                .map(text -> text.replace("Zeit: ", "").trim())
+                .orElseThrow(() -> new IllegalStateException("Cannot select changed time"));
+
+        String changedDate = changedDatePart + " " + changedTimePart;
+
+        String country = Optional.ofNullable(doc.select("body > div > div > table > tbody > tr:nth-child(6) > td:nth-child(1)"))
+                .map(Elements::text)
+                .orElseThrow(() -> new IllegalStateException("Cannot select country"));
+
+        double buyRate = Optional.ofNullable(doc.select("body > div > div > table > tbody > tr:nth-child(6) > td:nth-child(3)"))
+                .map(Elements::text)
+                .map(Double::valueOf)
+                .orElseThrow(() -> new IllegalStateException("Cannot select buy rate"));
+
+        double sellRate = Optional.ofNullable(doc.select("body > div > div > table > tbody > tr:nth-child(6) > td:nth-child(4)"))
+                .map(Elements::text)
+                .map(Double::valueOf)
+                .orElseThrow(() -> new IllegalStateException("Cannot select selll rate"));
+
+        cr.setFromCurrency("CHF");
+        cr.setCountry(country);
+        cr.setToCurrency("EUR");
+        cr.setBuyRate(buyRate);
+        cr.setSellRate(sellRate);
+        cr.setChangedDate(changedDate);
+        cr.setParsedDate(DATE_FORMAT_RATE.parse(changedDate));
+
+        return Collections.singletonList(cr);
     }
 
 }

@@ -1,0 +1,28 @@
+application:
+  updateCheck: 300000
+  timeOut: 10000
+  appName: LLB EUR Rate Monitor
+  userAgent: Mozilla
+
+---
+spring:
+  profiles: default
+  jpa:
+    show-sql: true
+  hibernate:
+    ddl-auto: update
+  datasource:
+    url: jdbc:hsqldb:file:/home/dru/Desktop/data/ratemonitor.hsqldb
+
+---
+spring:
+  profiles: prod
+  jpa:
+    show-sql: false
+  hibernate:
+    ddl-auto: update
+  datasource:
+    url: jdbc:mysql://localhost:3306/ratemonitor
+    username: ratemonitor
+    password: ratemonitor
+    driver-class-name: com.mysql.jdbc.Driver
