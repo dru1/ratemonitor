@@ -8,34 +8,20 @@
     <link rel="stylesheet" href="css/rates.css">
     <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed" rel="stylesheet">
 
-    <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>
     <script src="//cdn.rawgit.com/novus/nvd3/v1.8.1/build/nv.d3.min.js"></script>
     <script src="js/rates.js"></script>
-    <script type="text/javascript">
-        jQuery(document).ready(function() {
-            rmBuildChart("#historyLatest", 1000);
-            rmGetCurrent(function(data) {
-                if (data) {
-                    d3.select("#last_update").html(data.changedDate);
-
-                    var eur_chf = data.sellRate;
-                    d3.select("#eur_chf").html(eur_chf);
-                    rmTestRate("#test_eur_chf", "#result_eur_chf", eur_chf);
-
-                    var chf_eur = (1 / data.sellRate).toFixed(6);
-                    d3.select("#chf_eur").html(chf_eur);
-                    rmTestRate("#test_chf_eur", "#result_chf_eur", chf_eur);
-                }
-            });
-        });
-    </script>
 </head>
 <body>
 <h1>LLB EUR / CHF</h1>
 <p>Last Update: <span id="last_update"></span></p>
 
-<div id="historyLatest" class="chart"></div>
+<div id="history" class="chart"></div>
+<div>
+    <button id="history-older">Older</button>
+    <button id="history-newer">Newer</button>
+    <button id="history-current">Current</button>
+</div>
 
 <form action="javascript:return false;" class="calculations">
     <table>
@@ -79,6 +65,34 @@
         </tbody>
     </table>
 </form>
+
+<script type="text/javascript">
+    RateMonitor.buildChart();
+
+    RateMonitor.getCurrent(function(data) {
+        if (data) {
+            d3.select("#last_update").html(data.changedDate);
+
+            var eur_chf = data.sellRate;
+            d3.select("#eur_chf").html(eur_chf);
+            RateMonitor.testRates("#test_eur_chf", "#result_eur_chf", eur_chf);
+
+            var chf_eur = (1 / data.sellRate).toFixed(6);
+            d3.select("#chf_eur").html(chf_eur);
+            RateMonitor.testRates("#test_chf_eur", "#result_chf_eur", chf_eur);
+        }
+    });
+    d3.select("#history-older").on("click", function() {
+        RateMonitor.nextPage();
+    });
+    d3.select("#history-newer").on("click", function() {
+        RateMonitor.previousPage();
+    });
+    d3.select("#history-current").on("click", function() {
+        RateMonitor.currentPage();
+    });
+
+</script>
 
 </body>
 </html>
