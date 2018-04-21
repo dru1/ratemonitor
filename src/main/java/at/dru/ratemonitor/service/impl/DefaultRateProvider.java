@@ -28,7 +28,7 @@ public class DefaultRateProvider implements IRateProvider {
     @Override
     public Iterable<ConversionRate> getRates(@Nullable Integer limit, @Nonnull Integer page, @Nonnull DataViewMode mode) {
         if (limit != null) {
-            PageRequest pageRequest = new PageRequest(page, limit, SORT_RATE);
+            PageRequest pageRequest = PageRequest.of(page, limit, SORT_RATE);
             switch (mode) {
                 case DAY:
                     return conversionRateRepository.findAll((root, criteriaQuery, criteriaBuilder) -> {
