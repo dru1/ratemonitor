@@ -23,5 +23,5 @@ public interface ConversionRateRepository extends PagingAndSortingRepository<Con
     List<ConversionRate> findByCountry(String country, Pageable pageable);
 
     @Nullable
-    ConversionRate findTopByOrderByChangedDateDesc();
+    ConversionRate findTopByOrderByParsedDateDesc();
 }

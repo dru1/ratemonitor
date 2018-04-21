@@ -46,6 +46,6 @@ public class DefaultRateProvider implements IRateProvider {
     @Nullable
     @Override
     public ConversionRate getCurrent() {
-        return conversionRateRepository.findTopByOrderByChangedDateDesc();
+        return conversionRateRepository.findTopByOrderByParsedDateDesc();
     }
 }
