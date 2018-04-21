@@ -1,6 +1,25 @@
 body {
-    font-family: sans-serif;
+    font-family: 'Roboto Condensed', sans-serif;
 }
 .chart {
     height: 500px;
+}
+
+.calculations {
+    width: 800px;
+}
+
+.calculations td.key {
+    text-align: left;
+    width: 80px;
+}
+
+.calculations td.data, .calculations th.data {
+    text-align: right;
+    width: 150px;
+}
+
+.calculations input {
+    text-align: right;
+    width: 100px;
 }

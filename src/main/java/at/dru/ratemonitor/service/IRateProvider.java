@@ -11,4 +11,6 @@ public interface IRateProvider {
     @Nonnull
     Iterable<ConversionRate> getRates(@Nullable Integer limit, @Nonnull Integer page, @Nonnull DataViewMode mode);
 
+    @Nullable
+    ConversionRate getCurrent();
 }

@@ -6,6 +6,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.sql.Date;
 import java.util.List;
 
@@ -21,4 +22,6 @@ public interface ConversionRateRepository extends PagingAndSortingRepository<Con
     @Nonnull
     List<ConversionRate> findByCountry(String country, Pageable pageable);
 
+    @Nullable
+    ConversionRate findTopByOrderByChangedDateDesc();
 }

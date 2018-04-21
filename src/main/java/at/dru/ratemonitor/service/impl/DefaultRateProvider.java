@@ -42,4 +42,10 @@ public class DefaultRateProvider implements IRateProvider {
         }
         return conversionRateRepository.findAll(SORT_RATE);
     }
+
+    @Nullable
+    @Override
+    public ConversionRate getCurrent() {
+        return conversionRateRepository.findTopByOrderByChangedDateDesc();
+    }
 }

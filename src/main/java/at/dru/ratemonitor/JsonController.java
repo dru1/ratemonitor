@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +58,12 @@ public class JsonController {
         response.setAmount(rateList.size());
 
         return response;
+    }
+
+    @Nullable
+    @RequestMapping(value = "json/current", method = RequestMethod.GET)
+    public ConversionRate getCurrent() {
+        return rateProvider.getCurrent();
     }
 
 }

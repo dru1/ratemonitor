@@ -1,6 +1,3 @@
-//
-// Display the rates as a chart
-//
 
 function rmBuildChart(chartId, chartLimit, history) {
     d3.json("json/rates?limit=" + chartLimit, function(jsonData) {
@@ -67,3 +64,18 @@ function rmBuildChart(chartId, chartLimit, history) {
     }
 
 };
+
+function rmGetCurrent(callback) {
+    d3.json("json/current", callback);
+}
+
+function rmTestRate(inputField, outputField, rate) {
+    function update() {
+            var test_value = d3.select(inputField).property("value");
+            var result = (test_value * rate).toFixed(2);
+            d3.select(outputField).html(result);
+    }
+    d3.select(inputField).on("keyup", update);
+    d3.select(inputField).on("change", update);
+    update();
+}

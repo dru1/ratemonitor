@@ -6,6 +6,7 @@
 
     <link rel="stylesheet" href="https://cdn.rawgit.com/novus/nvd3/v1.8.1/build/nv.d3.css">
     <link rel="stylesheet" href="css/rates.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed" rel="stylesheet">
 
     <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>
@@ -13,14 +14,71 @@
     <script src="js/rates.js"></script>
     <script type="text/javascript">
         jQuery(document).ready(function() {
-            rmBuildChart("#historyLatest", 500);
-        });
+            rmBuildChart("#historyLatest", 1000);
+            rmGetCurrent(function(data) {
+                if (data) {
+                    d3.select("#last_update").html(data.changedDate);
 
+                    var eur_chf = data.sellRate;
+                    d3.select("#eur_chf").html(eur_chf);
+                    rmTestRate("#test_eur_chf", "#result_eur_chf", eur_chf);
+
+                    var chf_eur = (1 / data.sellRate).toFixed(6);
+                    d3.select("#chf_eur").html(chf_eur);
+                    rmTestRate("#test_chf_eur", "#result_chf_eur", chf_eur);
+                }
+            });
+        });
     </script>
 </head>
 <body>
-<h2>1 EUR Rate History</h2>
+<h1>EUR / CHF</h1>
+<p>Last Update: <span id="last_update"></span></p>
 
 <div id="historyLatest" class="chart"></div>
+
+<form action="javascript:return false;" class="calculations">
+    <table>
+        <thead>
+        <tr>
+            <th class="key"></th>
+            <th class="data">Rate</th>
+            <th class="data">Amount</th>
+            <th class="data">Result</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td class="key">
+                <label for="eur_chf">EUR / CHF</label>
+            </td>
+            <td class="data">
+                <span type="text" readonly="readonly" id="eur_chf"></span>
+            </td>
+            <td class="data">
+                <input type="number" value="2000" id="test_eur_chf" step="500"/>
+            </td>
+            <td class="data">
+                <span type="number" readonly="readonly" id="result_eur_chf"></span> CHF
+            </td>
+        </tr>
+        <tr>
+            <td class="key">
+                <label for="chf_eur">CHF / EUR</label>
+            </td>
+            <td class="data">
+                <span type="text" readonly="readonly" id="chf_eur"></span>
+            </td>
+            <td class="data">
+                <input type="number" value="2000" id="test_chf_eur" step="500"/>
+            </td>
+            <td class="data">
+                <span id="result_chf_eur"></span> EUR
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</form>
+
 </body>
 </html>
