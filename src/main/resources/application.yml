@@ -10,8 +10,9 @@ spring:
   profiles: default
   jpa:
     show-sql: true
-  hibernate:
-    ddl-auto: update
+    hibernate:
+      ddl-auto: update
+      use-new-id-generator-mappings: false
   datasource:
     url: jdbc:hsqldb:file:/home/dru/Desktop/data/ratemonitor.hsqldb
 
@@ -20,8 +21,10 @@ spring:
   profiles: prod
   jpa:
     show-sql: false
-  hibernate:
-    ddl-auto: update
+    hibernate:
+      ddl-auto: update
+      use-new-id-generator-mappings: false
+
   datasource:
     url: jdbc:mysql://localhost:3306/ratemonitor
     username: ratemonitor
