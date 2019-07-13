@@ -1,23 +1,24 @@
 package at.dru.ratemonitor.service;
 
 import javax.annotation.Nullable;
-import java.util.Date;
+import java.time.ZonedDateTime;
 
 public interface IRateUpdater {
 
-	/**
-	 * @return how many updates are processed
-	 */
-	int getUpdateCounter();
+    /**
+     * @return how many updates are processed
+     */
+    int getUpdateCounter();
 
     /**
      * @return date of the latest successful update
      */
     @Nullable
-    Date getLastUpdate();
+    ZonedDateTime getLastUpdate();
 
-	/**
-	 * invoke the update
-	 */
-	void update();
+    /**
+     * invoke the update
+     */
+    void update();
+
 }

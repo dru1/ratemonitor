@@ -4,21 +4,21 @@ import at.dru.ratemonitor.data.ConversionRate;
 import at.dru.ratemonitor.data.ConversionRateRepository;
 import at.dru.ratemonitor.service.IHtmlParser;
 import at.dru.ratemonitor.service.IRateUpdater;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Nullable;
-import java.util.Date;
+import java.time.ZonedDateTime;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Component
 public class DefaultRateUpdater implements IRateUpdater {
 
-    private static final Log logger = LogFactory.getLog(DefaultRateUpdater.class);
+    private static final Logger logger = LoggerFactory.getLogger(DefaultRateUpdater.class);
 
     @Autowired
     private ConversionRateRepository conversionRateRepository;
@@ -27,7 +27,7 @@ public class DefaultRateUpdater implements IRateUpdater {
     private IHtmlParser htmlParser;
 
     private final AtomicInteger updateCounter = new AtomicInteger();
-    private final AtomicReference<Date> lastUpdate = new AtomicReference<>();
+    private final AtomicReference<ZonedDateTime> lastUpdate = new AtomicReference<>();
 
     @Override
     public int getUpdateCounter() {
@@ -36,7 +36,7 @@ public class DefaultRateUpdater implements IRateUpdater {
 
     @Nullable
     @Override
-    public Date getLastUpdate() {
+    public ZonedDateTime getLastUpdate() {
         return lastUpdate.get();
     }
 
@@ -46,7 +46,7 @@ public class DefaultRateUpdater implements IRateUpdater {
         htmlParser.getConversionRates().forEach(this::saveConversionRate);
         logger.info("Done...");
         updateCounter.incrementAndGet();
-        lastUpdate.set(new Date());
+        lastUpdate.set(ZonedDateTime.now());
     }
 
     private boolean isNewRate(String changedDate) {
@@ -54,9 +54,9 @@ public class DefaultRateUpdater implements IRateUpdater {
     }
 
     @Transactional
-    private void saveConversionRate(ConversionRate cr) {
-        if (cr.getChangedDate() != null && isNewRate(cr.getChangedDate())) {
-            conversionRateRepository.save(cr);
+    private void saveConversionRate(ConversionRate conversionRate) {
+        if (conversionRate.getChangedDate() != null && isNewRate(conversionRate.getChangedDate())) {
+            conversionRateRepository.save(conversionRate);
         }
     }
 

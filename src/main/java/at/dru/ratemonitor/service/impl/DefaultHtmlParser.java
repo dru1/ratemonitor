@@ -10,16 +10,19 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 @Component
 public class DefaultHtmlParser implements IHtmlParser {
 
-    private static final SimpleDateFormat DATE_FORMAT_RATE = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+    private static final DateTimeFormatter DATE_FORMAT_RATE = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).withLocale(Locale.GERMAN);
+
     private static final String URL = "https://www.llb.li/de/private/anlegen/direktanlagen/devisen-und-edelmetalle/devisenkurse?iframe=1";
 
     @Value("${application.timeOut}")
@@ -33,19 +36,17 @@ public class DefaultHtmlParser implements IHtmlParser {
     public List<ConversionRate> getConversionRates() {
         try {
             return loadRatesFromURL();
-        } catch (IOException | ParseException e) {
-            throw new RuntimeException("Cannot parse rates", e);
+        } catch (IOException e) {
+            throw new IllegalStateException("Cannot parse rates from url.", e);
         }
     }
 
     @Nonnull
-    private List<ConversionRate> loadRatesFromURL() throws IOException, ParseException {
+    private List<ConversionRate> loadRatesFromURL() throws IOException {
         Document doc = Jsoup.connect(URL)
                 .timeout(timeOut)
                 .userAgent(userAgent)
                 .get();
-
-        ConversionRate cr = new ConversionRate();
 
         String changedDatePart = Optional.ofNullable(doc.select("body > div > div > p:nth-child(1)"))
                 .map(Elements::text)
@@ -58,6 +59,7 @@ public class DefaultHtmlParser implements IHtmlParser {
                 .orElseThrow(() -> new IllegalStateException("Cannot select changed time"));
 
         String changedDate = changedDatePart + " " + changedTimePart;
+        LocalDateTime parsedDate = LocalDateTime.parse(changedDate, DATE_FORMAT_RATE);
 
         String country = Optional.ofNullable(doc.select("body > div > div > table > tbody > tr:nth-child(6) > td:nth-child(1)"))
                 .map(Elements::text)
@@ -73,15 +75,16 @@ public class DefaultHtmlParser implements IHtmlParser {
                 .map(Double::valueOf)
                 .orElseThrow(() -> new IllegalStateException("Cannot select selll rate"));
 
-        cr.setFromCurrency("CHF");
-        cr.setCountry(country);
-        cr.setToCurrency("EUR");
-        cr.setBuyRate(buyRate);
-        cr.setSellRate(sellRate);
-        cr.setChangedDate(changedDate);
-        cr.setParsedDate(DATE_FORMAT_RATE.parse(changedDate));
+        ConversionRate conversionRate = new ConversionRate();
+        conversionRate.setFromCurrency("CHF");
+        conversionRate.setCountry(country);
+        conversionRate.setToCurrency("EUR");
+        conversionRate.setBuyRate(buyRate);
+        conversionRate.setSellRate(sellRate);
+        conversionRate.setChangedDate(changedDate);
+        conversionRate.setParsedDate(parsedDate);
 
-        return Collections.singletonList(cr);
+        return Collections.singletonList(conversionRate);
     }
 
 }

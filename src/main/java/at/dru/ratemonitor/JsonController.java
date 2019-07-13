@@ -12,7 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.text.DateFormat;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -35,10 +36,10 @@ public class JsonController {
         StatusResponse response = new StatusResponse();
 
         response.setUpdates(rateUpdater.getUpdateCounter());
-        String lastUpdate = Optional.ofNullable(rateUpdater.getLastUpdate())
-                .map(date -> DateFormat.getDateTimeInstance().format(date))
+        String lastUpdateAsString = Optional.ofNullable(rateUpdater.getLastUpdate())
+                .map(lastUpdate -> DateTimeFormatter.ofLocalizedDateTime(FormatStyle.LONG).format(lastUpdate))
                 .orElse(null);
-        response.setLastUpdate(lastUpdate);
+        response.setLastUpdate(lastUpdateAsString);
 
         return response;
     }
