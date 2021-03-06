@@ -61,19 +61,19 @@ public class DefaultHtmlParser implements IHtmlParser {
         String changedDate = changedDatePart + " " + changedTimePart;
         LocalDateTime parsedDate = LocalDateTime.parse(changedDate, DATE_FORMAT_RATE);
 
-        String country = Optional.ofNullable(doc.select("body > div > div > table > tbody > tr:nth-child(6) > td:nth-child(1)"))
+        String country = Optional.ofNullable(doc.select("body > div > div > table > tbody > tr:nth-child(8) > td:nth-child(1)"))
                 .map(Elements::text)
                 .orElseThrow(() -> new IllegalStateException("Cannot select country"));
 
-        double buyRate = Optional.ofNullable(doc.select("body > div > div > table > tbody > tr:nth-child(6) > td:nth-child(3)"))
+        double buyRate = Optional.ofNullable(doc.select("body > div > div > table > tbody > tr:nth-child(8) > td:nth-child(3)"))
                 .map(Elements::text)
                 .map(Double::valueOf)
                 .orElseThrow(() -> new IllegalStateException("Cannot select buy rate"));
 
-        double sellRate = Optional.ofNullable(doc.select("body > div > div > table > tbody > tr:nth-child(6) > td:nth-child(4)"))
+        double sellRate = Optional.ofNullable(doc.select("body > div > div > table > tbody > tr:nth-child(8) > td:nth-child(4)"))
                 .map(Elements::text)
                 .map(Double::valueOf)
-                .orElseThrow(() -> new IllegalStateException("Cannot select selll rate"));
+                .orElseThrow(() -> new IllegalStateException("Cannot select sell rate"));
 
         ConversionRate conversionRate = new ConversionRate();
         conversionRate.setFromCurrency("CHF");
