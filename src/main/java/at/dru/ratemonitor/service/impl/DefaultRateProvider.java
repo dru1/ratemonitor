@@ -16,7 +16,7 @@ import javax.annotation.Nullable;
 @Component
 public class DefaultRateProvider implements IRateProvider {
 
-    private static final Sort SORT_RATE = new Sort(Sort.Direction.DESC, "id");
+    private static final Sort SORT_RATE = Sort.by(Sort.Direction.DESC, "id");
 
     @Autowired
     private ConversionRateRepository conversionRateRepository;
@@ -48,4 +48,5 @@ public class DefaultRateProvider implements IRateProvider {
     public ConversionRate getCurrent() {
         return conversionRateRepository.findTopByOrderByParsedDateDesc();
     }
+
 }
