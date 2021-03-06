@@ -7,7 +7,9 @@ application:
 
 ---
 spring:
-  profiles: default
+  config:
+    activate:
+      on-profile: default
   jpa:
     show-sql: true
     hibernate:
@@ -18,7 +20,9 @@ spring:
 
 ---
 spring:
-  profiles: prod
+  config:
+    activate:
+      on-profile: prod
   jpa:
     show-sql: false
     hibernate:

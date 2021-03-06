@@ -10,7 +10,9 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.Collections;
@@ -21,7 +23,8 @@ import java.util.Optional;
 @Component
 public class DefaultHtmlParser implements IHtmlParser {
 
-    private static final DateTimeFormatter DATE_FORMAT_RATE = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).withLocale(Locale.GERMAN);
+    private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).withLocale(Locale.GERMAN);
+    private static final DateTimeFormatter TIME_FORMAT = DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM).withLocale(Locale.GERMAN);
 
     private static final String URL = "https://www.llb.li/de/private/anlegen/direktanlagen/devisen-und-edelmetalle/devisenkurse?iframe=1";
 
@@ -59,7 +62,7 @@ public class DefaultHtmlParser implements IHtmlParser {
                 .orElseThrow(() -> new IllegalStateException("Cannot select changed time"));
 
         String changedDate = changedDatePart + " " + changedTimePart;
-        LocalDateTime parsedDate = LocalDateTime.parse(changedDate, DATE_FORMAT_RATE);
+        LocalDateTime parsedDate = LocalDate.parse(changedDatePart, DATE_FORMAT).atTime(LocalTime.parse(changedTimePart, TIME_FORMAT));
 
         String country = Optional.ofNullable(doc.select("body > div > div > table > tbody > tr:nth-child(8) > td:nth-child(1)"))
                 .map(Elements::text)
