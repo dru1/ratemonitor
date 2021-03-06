@@ -25,4 +25,5 @@ public class RatesResponse {
     public void setRates(List<ConversionRate> rates) {
         this.rates = rates;
     }
+
 }

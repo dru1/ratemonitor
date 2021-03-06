@@ -21,4 +21,5 @@ public class StatusResponse {
     public void setLastUpdate(String lastUpdate) {
         this.lastUpdate = lastUpdate;
     }
+
 }

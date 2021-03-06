@@ -24,4 +24,5 @@ public interface ConversionRateRepository extends PagingAndSortingRepository<Con
 
     @Nullable
     ConversionRate findTopByOrderByParsedDateDesc();
+
 }
