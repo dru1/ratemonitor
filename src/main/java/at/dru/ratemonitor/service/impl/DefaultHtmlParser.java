@@ -4,9 +4,11 @@ import at.dru.ratemonitor.data.ConversionRate;
 import at.dru.ratemonitor.service.IHtmlParser;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
@@ -33,6 +35,9 @@ public class DefaultHtmlParser implements IHtmlParser {
 
     @Value("${application.userAgent}")
     private String userAgent;
+
+    @Value("${application.country}")
+    private String country;
 
     @Nonnull
     @Override
@@ -64,17 +69,21 @@ public class DefaultHtmlParser implements IHtmlParser {
         String changedDate = changedDatePart + " " + changedTimePart;
         LocalDateTime parsedDate = LocalDate.parse(changedDatePart, DATE_FORMAT).atTime(LocalTime.parse(changedTimePart, TIME_FORMAT));
 
-        String country = Optional.ofNullable(doc.select("body > div > div > table > tbody > tr:nth-child(8) > td:nth-child(1)"))
-                .map(Elements::text)
+        Element countryElement = doc.select("body > div > div > table > tbody > tr")
+                .stream()
+                .filter(e -> country.equalsIgnoreCase(e.child(0).text()))
+                .findFirst()
                 .orElseThrow(() -> new IllegalStateException("Cannot select country"));
 
-        double buyRate = Optional.ofNullable(doc.select("body > div > div > table > tbody > tr:nth-child(8) > td:nth-child(3)"))
-                .map(Elements::text)
+        Assert.isTrue(countryElement.childrenSize() == 4, "Expected 4 children elements");
+
+        double buyRate = Optional.ofNullable(countryElement.child(2))
+                .map(Element::text)
                 .map(Double::valueOf)
                 .orElseThrow(() -> new IllegalStateException("Cannot select buy rate"));
 
-        double sellRate = Optional.ofNullable(doc.select("body > div > div > table > tbody > tr:nth-child(8) > td:nth-child(4)"))
-                .map(Elements::text)
+        double sellRate = Optional.ofNullable(countryElement.child(3))
+                .map(Element::text)
                 .map(Double::valueOf)
                 .orElseThrow(() -> new IllegalStateException("Cannot select sell rate"));
 
