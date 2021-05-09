@@ -2,7 +2,7 @@ plugins {
     java
     id("maven-publish")
     war
-    id("org.springframework.boot") version "2.4.3"
+    id("org.springframework.boot") version "2.4.5"
 }
 
 repositories {
@@ -13,29 +13,29 @@ repositories {
 
 dependencies {
     // Spring
-    implementation("org.springframework.boot:spring-boot-starter-web:2.4.3")
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa:2.4.3")
+    implementation("org.springframework.boot:spring-boot-starter-web:2.4.5")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa:2.4.5")
 
     // Databases
-    implementation("org.hsqldb:hsqldb:2.5.1")
-    implementation("mysql:mysql-connector-java:8.0.23")
+    implementation("org.hsqldb:hsqldb:2.5.2")
+    implementation("mysql:mysql-connector-java:8.0.24")
 
     // Utils
     implementation("com.google.code.findbugs:jsr305:3.0.2")
-    implementation("com.google.guava:guava:28.2-jre")
+    implementation("com.google.guava:guava:30.1.1-jre")
     implementation("org.apache.commons:commons-lang3:3.12.0")
     implementation("org.jsoup:jsoup:1.13.1")
 
     // Tests
-    testImplementation("org.springframework.boot:spring-boot-starter-test:2.4.3")
+    testImplementation("org.springframework.boot:spring-boot-starter-test:2.4.5")
     testImplementation("org.dbunit:dbunit:2.7.0")
     testImplementation("com.github.springtestdbunit:spring-test-dbunit:1.3.0")
 
     // Spring Boot
-    providedCompile("org.springframework.boot:spring-boot-starter-tomcat:2.4.3")
+    providedCompile("org.springframework.boot:spring-boot-starter-tomcat:2.4.5")
 
     // JPA
-    annotationProcessor("org.hibernate:hibernate-jpamodelgen:5.4.28.Final")
+    annotationProcessor("org.hibernate:hibernate-jpamodelgen:5.4.31.Final")
 }
 
 group = "at.dru"
