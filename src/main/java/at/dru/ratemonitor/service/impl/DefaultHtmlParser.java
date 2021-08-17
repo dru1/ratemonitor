@@ -28,7 +28,7 @@ public class DefaultHtmlParser implements IHtmlParser {
     private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).withLocale(Locale.GERMAN);
     private static final DateTimeFormatter TIME_FORMAT = DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM).withLocale(Locale.GERMAN);
 
-    private static final String URL = "https://www.llb.li/de/private/anlegen/direktanlagen/devisen-und-edelmetalle/devisenkurse?iframe=1";
+    private static final String URL = "https://www.llb.li/de/private/anlegen/direktanlagen/devisen-und-edelmetalle/notenkurse?iframe=1";
 
     @Value("${application.timeOut}")
     private int timeOut;
