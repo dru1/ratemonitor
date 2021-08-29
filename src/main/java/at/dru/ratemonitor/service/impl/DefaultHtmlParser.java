@@ -56,12 +56,12 @@ public class DefaultHtmlParser implements IHtmlParser {
                 .userAgent(userAgent)
                 .get();
 
-        String changedDatePart = Optional.ofNullable(doc.select("body > div > div > p:nth-child(1)"))
+        String changedDatePart = Optional.of(doc.select("body > div > div > p:nth-child(1)"))
                 .map(Elements::text)
                 .map(text -> text.replace("Datum: ", "").trim())
                 .orElseThrow(() -> new IllegalStateException("Cannot select changed date"));
 
-        String changedTimePart = Optional.ofNullable(doc.select("body > div > div > p:nth-child(2)"))
+        String changedTimePart = Optional.of(doc.select("body > div > div > p:nth-child(2)"))
                 .map(Elements::text)
                 .map(text -> text.replace("Zeit: ", "").trim())
                 .orElseThrow(() -> new IllegalStateException("Cannot select changed time"));
@@ -77,12 +77,12 @@ public class DefaultHtmlParser implements IHtmlParser {
 
         Assert.isTrue(countryElement.childrenSize() == 4, "Expected 4 children elements");
 
-        double buyRate = Optional.ofNullable(countryElement.child(2))
+        double buyRate = Optional.of(countryElement.child(2))
                 .map(Element::text)
                 .map(Double::valueOf)
                 .orElseThrow(() -> new IllegalStateException("Cannot select buy rate"));
 
-        double sellRate = Optional.ofNullable(countryElement.child(3))
+        double sellRate = Optional.of(countryElement.child(3))
                 .map(Element::text)
                 .map(Double::valueOf)
                 .orElseThrow(() -> new IllegalStateException("Cannot select sell rate"));

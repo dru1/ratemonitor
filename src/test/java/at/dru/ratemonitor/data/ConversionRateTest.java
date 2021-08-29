@@ -2,17 +2,16 @@ package at.dru.ratemonitor.data;
 
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+@SpringBootTest
 @ContextConfiguration("dbunit-context.xml")
 @TestExecutionListeners({DependencyInjectionTestExecutionListener.class, DbUnitTestExecutionListener.class})
 public class ConversionRateTest {
@@ -22,7 +21,7 @@ public class ConversionRateTest {
 
     @Test
     @DatabaseSetup("test-fourrates.xml")
-    public void testFind() throws Exception {
+    public void testFind() {
         Iterable<ConversionRate> rates = conversionRateRepository.findAll();
         int count = 0;
         for (ConversionRate rate : rates) {
