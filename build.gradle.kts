@@ -2,7 +2,7 @@ plugins {
     java
     id("maven-publish")
     war
-    id("org.springframework.boot") version "2.5.4"
+    id("org.springframework.boot") version "2.6.6"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
 }
 
@@ -19,17 +19,17 @@ dependencies {
 
     // Utils
     implementation("com.google.code.findbugs:jsr305:3.0.2")
-    implementation("com.google.guava:guava:30.1.1-jre")
+    implementation("com.google.guava:guava:31.1-jre")
     implementation("org.apache.commons:commons-lang3:3.12.0")
-    implementation("org.jsoup:jsoup:1.14.2")
+    implementation("org.jsoup:jsoup:1.14.3")
 
     // Databases
     runtimeOnly("org.hsqldb:hsqldb:2.5.2")
-    runtimeOnly("mysql:mysql-connector-java:8.0.25")
+    runtimeOnly("mysql:mysql-connector-java:8.0.28")
 
     // Tests
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("org.dbunit:dbunit:2.7.2")
+    testImplementation("org.dbunit:dbunit:2.7.3")
     testImplementation("com.github.springtestdbunit:spring-test-dbunit:1.3.0")
 
     // Spring Boot
