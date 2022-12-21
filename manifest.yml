@@ -1,9 +1,0 @@
-applications:
-- name: ratemonitor
-  memory: 1024M
-  host: ratemonitor
-  domain: cfapps.io
-  env: {
-    }
-  services: {
-    }
