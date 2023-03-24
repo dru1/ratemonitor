@@ -4,6 +4,7 @@ plugins {
     war
     id("org.springframework.boot") version "2.7.6"
     id("io.spring.dependency-management") version "1.0.15.RELEASE"
+    id("org.cyclonedx.bom") version "1.7.4"
 }
 
 repositories {
@@ -66,4 +67,13 @@ tasks.withType<Test> {
 
 tasks.bootRun {
     mainClass.set("at.dru.ratemonitor.Application")
+}
+
+tasks.cyclonedxBom {
+    setProjectType("application")
+    setOutputName("bom")
+    setOutputFormat("json")
+    setIncludeBomSerialNumber(false)
+    setIncludeLicenseText(true)
+    setComponentVersion("2.0.0")
 }
