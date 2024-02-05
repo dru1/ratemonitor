@@ -1,8 +1,8 @@
 package at.dru.ratemonitor.data;
 
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Nonnull;
@@ -11,7 +11,7 @@ import java.sql.Date;
 import java.util.List;
 
 @Repository
-public interface ConversionRateRepository extends PagingAndSortingRepository<ConversionRate, Long>, JpaSpecificationExecutor<ConversionRate> {
+public interface ConversionRateRepository extends JpaRepository<ConversionRate, Long>, JpaSpecificationExecutor<ConversionRate> {
 
     @Nonnull
     List<ConversionRate> findByChangedDate(String changedDate);

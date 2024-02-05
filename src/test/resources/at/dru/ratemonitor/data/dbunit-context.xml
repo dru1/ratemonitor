@@ -12,11 +12,14 @@
 
     <tx:annotation-driven transaction-manager="transactionManager"/>
 
-    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-        <property name="driverClassName" value="org.hsqldb.jdbcDriver"/>
-        <property name="url" value="jdbc:hsqldb:mem:ratemonitor-test"/>
-        <property name="username" value="sa"/>
-        <property name="password" value=""/>
+    <bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
+        <constructor-arg name="configuration">
+            <bean class="com.zaxxer.hikari.HikariConfig">
+                <property name="username" value="sa"/>
+                <property name="password" value=""/>
+                <property name="jdbcUrl" value="jdbc:h2:mem:ratemonitor-test"/>
+            </bean>
+        </constructor-arg>
     </bean>
 
     <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">

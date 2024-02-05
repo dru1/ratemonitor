@@ -2,9 +2,9 @@ plugins {
     java
     id("maven-publish")
     war
-    id("org.springframework.boot") version "2.7.10"
-    id("io.spring.dependency-management") version "1.0.15.RELEASE"
-    id("org.cyclonedx.bom") version "1.7.4"
+    id("org.springframework.boot") version "3.2.2"
+    id("io.spring.dependency-management") version "1.1.4"
+    id("org.cyclonedx.bom") version "1.8.2"
 }
 
 repositories {
@@ -20,13 +20,12 @@ dependencies {
 
     // Utils
     implementation("com.google.code.findbugs:jsr305:3.0.2")
-    implementation("com.google.guava:guava:31.1-jre")
-    implementation("org.apache.commons:commons-lang3:3.12.0")
-    implementation("org.jsoup:jsoup:1.15.4")
+    implementation("com.google.guava:guava:33.0.0-jre")
+    implementation("org.jsoup:jsoup:1.17.2")
 
     // Databases
-    runtimeOnly("org.hsqldb:hsqldb:2.5.2")
-    runtimeOnly("mysql:mysql-connector-java:8.0.32")
+    runtimeOnly("com.h2database:h2:2.2.224")
+    runtimeOnly("mysql:mysql-connector-java:8.0.33")
 
     // Tests
     testImplementation("org.springframework.boot:spring-boot-starter-test")
@@ -37,7 +36,7 @@ dependencies {
     providedCompile("org.springframework.boot:spring-boot-starter-tomcat")
 
     // JPA
-    annotationProcessor("org.hibernate:hibernate-jpamodelgen")
+    annotationProcessor("org.hibernate.orm:hibernate-jpamodelgen")
 }
 
 group = "at.dru"
@@ -45,8 +44,8 @@ version = "0.0.1-SNAPSHOT"
 description = "at.dru.ratemonitor"
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 }
 
 publishing {
