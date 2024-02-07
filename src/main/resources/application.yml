@@ -5,8 +5,9 @@ application:
   userAgent: Mozilla
   country: EWU
 
+#logging.level=INFO
 #logging.level.org.hibernate: DEBUG
-#logging.leve.com.zaxxer.hikari: DEBUG
+#logging.level.com.zaxxer.hikari: DEBUG
 
 ---
 spring:
@@ -18,7 +19,7 @@ spring:
     hibernate:
       ddl-auto: update
   datasource:
-    url: jdbc:h2:file:${user.home}/data/dbs/ratemonitor.hsqldb
+    url: jdbc:h2:file:${user.home}/data/dbs/ratemonitor
 
 ---
 spring:
