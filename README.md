@@ -1,1 +1,1 @@
-# ratemonitor ![Java CI](https://github.com/dru1/ratemonitor/workflows/Java%20CI/badge.svg?branch=master)
+# ratemonitor [![Java CI](https://github.com/dru1/ratemonitor/actions/workflows/gradle.yml/badge.svg)](https://github.com/dru1/ratemonitor/actions/workflows/gradle.yml)
