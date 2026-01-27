@@ -3,5 +3,8 @@
         "ratemonitor"
     ],
     "java.configuration.updateBuildConfiguration": "automatic",
-    "editor.rulers": [ 120 ]
+    "editor.rulers": [
+        120
+    ],
+    "java.compile.nullAnalysis.mode": "disabled"
 }
