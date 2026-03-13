@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
-import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -39,7 +38,6 @@ public class DefaultHtmlParser implements IHtmlParser {
     @Value("${application.country}")
     private String country;
 
-    @Nonnull
     @Override
     public List<ConversionRate> getConversionRates() {
         try {
@@ -49,7 +47,6 @@ public class DefaultHtmlParser implements IHtmlParser {
         }
     }
 
-    @Nonnull
     private List<ConversionRate> loadRatesFromURL() throws IOException {
         Document doc = Jsoup.connect(URL)
                 .timeout(timeOut)

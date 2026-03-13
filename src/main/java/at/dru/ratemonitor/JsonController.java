@@ -4,14 +4,12 @@ import at.dru.ratemonitor.data.ConversionRate;
 import at.dru.ratemonitor.data.DataViewMode;
 import at.dru.ratemonitor.service.IRateProvider;
 import at.dru.ratemonitor.service.IRateUpdater;
+import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.ArrayList;
@@ -30,8 +28,7 @@ public class JsonController {
     /**
      * @return status of the updater
      */
-    @Nonnull
-    @RequestMapping(value = "/json/status", method = RequestMethod.GET)
+    @GetMapping("/json/status")
     public StatusResponse getStatus() {
         StatusResponse response = new StatusResponse();
 
@@ -44,8 +41,7 @@ public class JsonController {
         return response;
     }
 
-    @Nonnull
-    @RequestMapping(value = "/json/rates", method = RequestMethod.GET)
+    @GetMapping("/json/rates")
     public RatesResponse getRates(@RequestParam(value = "mode", defaultValue = "ROW") DataViewMode mode,
                                   @RequestParam(value = "limit", required = false) Integer limit,
                                   @RequestParam(value = "page", defaultValue = "0", required = false) Integer page) {
@@ -61,9 +57,8 @@ public class JsonController {
         return response;
     }
 
-    @Nullable
-    @RequestMapping(value = "json/current", method = RequestMethod.GET)
-    public ConversionRate getCurrent() {
+    @GetMapping("json/current")
+    public @Nullable ConversionRate getCurrent() {
         return rateProvider.getCurrent();
     }
 

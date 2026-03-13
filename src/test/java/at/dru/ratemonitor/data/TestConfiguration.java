@@ -16,7 +16,6 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.TransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import javax.annotation.Nonnull;
 import javax.sql.DataSource;
 
 @Configuration
@@ -46,7 +45,7 @@ public class TestConfiguration {
     }
 
     @Bean
-    public TransactionManager transactionManager(@Nonnull EntityManagerFactory emf) {
+    public TransactionManager transactionManager(EntityManagerFactory emf) {
         JpaTransactionManager transactionManager = new JpaTransactionManager();
         transactionManager.setEntityManagerFactory(emf);
         return transactionManager;

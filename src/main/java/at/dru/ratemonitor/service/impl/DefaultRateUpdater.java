@@ -4,13 +4,13 @@ import at.dru.ratemonitor.data.ConversionRate;
 import at.dru.ratemonitor.data.ConversionRateRepository;
 import at.dru.ratemonitor.service.IHtmlParser;
 import at.dru.ratemonitor.service.IRateUpdater;
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Nullable;
 import java.time.ZonedDateTime;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
@@ -34,9 +34,8 @@ public class DefaultRateUpdater implements IRateUpdater {
         return updateCounter.get();
     }
 
-    @Nullable
     @Override
-    public ZonedDateTime getLastUpdate() {
+    public @Nullable ZonedDateTime getLastUpdate() {
         return lastUpdate.get();
     }
 
